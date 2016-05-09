@@ -58,3 +58,5 @@ cont_backoff++;// conteo de segundos
 aleatorio=random(1,cont_backoff);
 cont_backoff=0;
 }
+
+//tramatx("A"+"sensor1"+";"+"sensor1"+";");

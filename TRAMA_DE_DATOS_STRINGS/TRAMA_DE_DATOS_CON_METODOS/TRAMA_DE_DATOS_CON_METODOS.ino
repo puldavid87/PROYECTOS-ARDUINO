@@ -1,3 +1,4 @@
+
 /*CADENA DE DATOS PARA REDES DE SENSORES
  * HACIA NODO PRINCIPAL
  * LA TRAMA CUENTA CON LOS SIGUIENTES DATOS
@@ -58,8 +59,7 @@
 
 int valor_cad;
 int valor_dig;
-int sen_analog;
-int sen_dig;
+int num_sen;
 String cadena;
 int a;
 int i,j;
@@ -71,7 +71,7 @@ String bateria;
 //TRAMA
 /*
 B00112110B130B21B4BB    
-B0011009110B130B110B110B110B110B110B110B110B91B4B4B4B4B4B4B4B4BB 
+B0011009110B130B110B110B110B110B110B110B110B91B4B4B4B4B4B4B4B4BB  
 */    
 void setup() {
 Serial.begin(9600);
@@ -89,19 +89,19 @@ void serialEvent (){
      a=cadena.length();// determinar tamano de trama
      char buf [a]; //definicion de vector con tamano de trama
      cadena.toCharArray(buf,a);//conversion de un string a un vector
-  //evaluacion de clinetes segun identificador
+    //evaluacion de clinetes segun identificador
       switch(buf[0]){
         case 'A':
           Serial.println("usuario 1");
-           if(buf[0]==buf[a-2]){
-              Serial.println("Validado");
-            }
+          usuario(buf[0],buf[a-2]);
          break;
          case 'B':
          Serial.println("usuario 2");
+          usuario(buf[0],buf[a-2]);
           break;
         default:
           Serial.println("APRENDER");
+           usuario(buf[0],buf[a-2]);
          break;
       }
       //evaluacion de bateria
@@ -121,11 +121,11 @@ void serialEvent (){
       }
       //conversion de datos de sensores tipo string a int
     dato +=(char)buf[7];//conversion de char a string
-    sen_analog=dato.toInt();// conversion de string a int de # de sensores
+    num_sen=dato.toInt();// conversion de string a int de # de sensores
     Serial.print("Sensores:");
-    Serial.println(sen_analog);
+    Serial.println(num_sen);
     //ciclo de lectura de datos analogos
-    for(i=0;i<sen_analog;i++){
+    for(i=0;i<num_sen;i++){
         valor_cad=atoi(&buf[b]);// conversio de 3 caracteres a int 
         Serial.print("Sensor_analog ");
         Serial.print(i+1);
@@ -140,17 +140,17 @@ void serialEvent (){
      b=6;i=0;
      dato="";
      dato+= (char)buf[c];//conversion de string a int de # de sensores
-     sen_dig=dato.toInt();// # de sensores digitales
+     num_sen=dato.toInt();// # de sensores digitales
      Serial.print("Sensores_dig:");
-     Serial.println(sen_dig);
+     Serial.println(num_sen);
      //ciclo de lectura de valores digitales
      d=c+1;
-     for(;i<sen_dig;i++){
+     for(;i<num_sen;i++){
           valor_dig=atoi(&buf[d]);
           Serial.print("Sensor ");
           Serial.print(i+1);
-         Serial.print(":");
-         Serial.println(valor_dig);
+           Serial.print(":");
+           Serial.println(valor_dig);
           d=d+2;//conteo para seleccion de posicion de vector
       }
       i=0;
@@ -159,3 +159,13 @@ void serialEvent (){
   } 
  }
 
+ void usuario (char dato_1, char dato_2){
+    if(dato_1==dato_2){
+      Serial.println("Usuario correcto");
+      }
+     else
+     Serial.println("aprendizaje"); 
+  }
+  void conteosensores (){
+    
+    }
